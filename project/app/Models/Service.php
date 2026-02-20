@@ -10,6 +10,7 @@ class Service extends Model
         'category_id',
         'name',
         'description',
+        'image',
         'email',
         'phone',
         'address',
