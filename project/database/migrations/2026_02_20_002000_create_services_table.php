@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('address')->nullable();
 
             $table->enum('noise_level', ['low', 'medium', 'high'])->nullable();
-            $table->enum('lighting_level', ['low', 'medium', 'high'])->nullable();
+            $table->enum('lighting_level', ['dim', 'normal', 'bright'])->nullable();
             $table->enum('crowd_level', ['low', 'medium', 'high'])->nullable();
 
             $table->string('autism_friendly_hours')->nullable();
