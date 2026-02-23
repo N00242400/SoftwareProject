@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
+use illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
@@ -40,7 +41,7 @@ public function store(Request $request)
         'address' => 'required|string|max:255',
         'noise_level' => 'required|in:low,medium,high',
         'lighting_level' => 'required|in:dim,normal,bright',   
-        'crowd_level' => 'required|in:empty,moderate,crowded',  
+        'crowd_level' => 'required|in:low,medium,high',  
         'autism_friendly_hours' => 'required|string|max:255',    
         'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',      
     ]);
@@ -53,7 +54,20 @@ public function store(Request $request)
         $data['image'] = $imageName;
     }
 
-    Service::create($data);
+    Service::create([
+        'name' => $request->name,
+        'description' => $request->description,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'address' => $request->address,
+        'noise_level' => $request->noise_level,
+        'lighting_level' => $request->lighting_level,
+        'crowd_level' => $request->crowd_level,
+        'autism_friendly_hours' => $request->autism_friendly_hours,
+         'image' => $imageName,
+         'created_at'=>now(),
+         'updated_at'=>now()
+    ]);
 
     return to_route('services.index')->with('success', 'Service created successfully.');
 }

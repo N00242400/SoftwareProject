@@ -1,8 +1,5 @@
 @props([
-    'action', 
-    'method' => 'POST',  
-    'service' => null,
-    'categories' => []
+    'action', 'method' => 'POST', 'categories' => []
 ])
 
 <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
