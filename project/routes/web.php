@@ -8,7 +8,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/services',[ServiceController::class,'index']);
+Route::resource('services', ServiceController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

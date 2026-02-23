@@ -39,8 +39,8 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        //
-    }
+        return view('services.show')->with('service',$service);
+        }
 
     /**
      * Show the form for editing the specified resource.
