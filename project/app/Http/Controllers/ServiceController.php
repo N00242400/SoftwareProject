@@ -12,7 +12,10 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        //
+        //fetch all services
+        $services = Service::all();
+        //pass services to view
+        return view('services.index', compact('services'));
     }
 
     /**
