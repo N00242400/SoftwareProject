@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
-use illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Category;
 
 class ServiceController extends Controller
 {
@@ -24,7 +25,8 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return view('services.create');
+        $categories = Category::all();
+        return view('services.create', compact('categories'));
     }
 
     /**
@@ -42,7 +44,8 @@ public function store(Request $request)
         'noise_level' => 'required|in:low,medium,high',
         'lighting_level' => 'required|in:dim,normal,bright',   
         'crowd_level' => 'required|in:low,medium,high',  
-        'autism_friendly_hours' => 'required|string|max:255',    
+        'autism_friendly_hours' => 'required|string|max:255',
+        'category_id' => 'required|exists:categories,id',    
         'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',      
     ]);
 
@@ -65,6 +68,7 @@ public function store(Request $request)
         'crowd_level' => $request->crowd_level,
         'autism_friendly_hours' => $request->autism_friendly_hours,
          'image' => $imageName,
+         'category_id' => $request->category_id,
          'created_at'=>now(),
          'updated_at'=>now()
     ]);

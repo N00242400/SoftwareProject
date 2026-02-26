@@ -14,11 +14,11 @@
                             <h3 class = "font-semibold text-lg mb-4">Add a New Service:</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             
-                                    <x-service-form
-                                        :action="route('services.store')"
-                                        :methods="'POST'"
-                                        />
-                                </a>
+                                <x-service-form
+                                :action="route('services.store')"
+                                :method="'POST'"
+                                :categories="$categories"
+                            />
                               
                             </div>
                         </div>

@@ -8,6 +8,20 @@
     @if($method === 'PUT' || $method === 'PATCH')
         @method($method)
     @endif
+
+{{--
+    @if ($errors->any())
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-4 rounded">
+        <strong>There were some problems:</strong>
+        <ul class="mt-2 list-disc list-inside">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+--}}
+
     {{-- name form --}}
     <div class="mb-4">
         <label for="name" class="block text-sm text-gray-700">Name</label>
@@ -156,9 +170,55 @@
     @enderror
 </div>
 
+{{-- Category --}}
+<div class="mb-4">
+    <label for="category_id" class="block text-sm text-gray-700">
+        Category
+    </label>
+
+    <select
+        name="category_id"
+        id="category_id"
+        required
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+    >
+        <option value="">Select a category</option>
+
+        @foreach($categories as $category)
+            <option 
+                value="{{ $category->id }}"
+                {{ old('category_id', $service->category_id ?? '') == $category->id ? 'selected' : '' }}
+            >
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+
+    @error('category_id')
+        <p class="text-sm text-red-600">{{ $message }}</p>
+    @enderror
+</div>
+
+<div class="mb-4">
+    <label for="autism_friendly_hours" class="block text-sm text-gray-700">
+        Autism Friendly Hours
+    </label>
+    <input
+        type="text"
+        name="autism_friendly_hours"
+        id="autism_friendly_hours"
+        value="{{ old('autism_friendly_hours', $service->autism_friendly_hours ?? '') }}"
+        required
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+    />
+    @error('autism_friendly_hours')
+        <p class="text-sm text-red-600">{{ $message }}</p>
+    @enderror
+</div>
+
         <div>
-        <x-primary-button>
-            {{ isset($service) ? 'Update Service' : 'Add Service' }}
-        </x-primary-button>
+            <x-primary-button type="submit">
+                {{ isset($service) ? 'Update Service' : 'Add Service' }}
+            </x-primary-button>
     </div>
 </form>
