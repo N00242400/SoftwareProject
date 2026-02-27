@@ -65,22 +65,46 @@ class ReviewController extends Controller
      */
     public function edit(Review $review)
     {
-        //
+        
+        if ($review->user_id !== auth()->id()) {
+            return redirect()->back()->with('error', 'Unauthorized.');
+        }
+    
+        return view('reviews.edit', compact('review'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Review $review)
-    {
-        //
+{
+    if ($review->user_id !== auth()->id()) {
+        return redirect()->back()->with('error', 'Unauthorized.');
     }
+
+    $request->validate([
+        'description' => 'nullable|string|max:1000',
+        'noise_rating' => 'nullable|in:low,medium,high',
+        'lighting_rating' => 'nullable|in:low,medium,high',
+        'crowd_rating' => 'nullable|in:dim,normal,bright',
+    ]);
+
+    $review->update($request->only(['description','noise_rating','lighting_rating','crowd_rating']));
+
+    return redirect()->back()->with('success', 'Review updated successfully!');
+}
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Review $review)
-    {
-        //
+{
+    if ($review->user_id !== auth()->id()) {
+        return redirect()->back()->with('error', 'Unauthorized.');
     }
+
+    $review->delete();
+
+    return redirect()->back()->with('success', 'Review deleted successfully!');
+}
 }

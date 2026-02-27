@@ -3,13 +3,14 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::resource('services', ServiceController::class);
-Route::resource('reviews', ReviewController::class)->only(['store']);
+Route::resource('reviews', ReviewController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
