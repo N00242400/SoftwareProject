@@ -84,6 +84,7 @@ public function store(Request $request)
      */
     public function show(Service $service)
     {
+        $service->load('reviews.user');
         return view('services.show')->with('service',$service);
         }
 

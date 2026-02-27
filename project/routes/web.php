@@ -9,6 +9,7 @@ Route::get('/', function () {
 });
 
 Route::resource('services', ServiceController::class);
+Route::resource('reviews', ReviewController::class)->only(['store']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
