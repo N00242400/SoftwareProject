@@ -25,7 +25,11 @@ class ServiceController extends Controller
      */
     public function create()
     {
+
         $categories = Category::all();
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('services.index')->with('error', 'Unauthorized access.');
+        }
         return view('services.create', compact('categories'));
     }
 
@@ -88,7 +92,13 @@ public function store(Request $request)
      */
     public function edit(Service $service)
     {
-        //
+        $categories = Category::all();
+    if(auth()->user()->role !== 'admin') {
+        return redirect()->route('services.index')->with('error', 'Unauthorized access.');
+    }
+        return view('services.edit')
+            ->with('service', $service)
+            ->with('categories', $categories);
     }
 
     /**
@@ -96,7 +106,37 @@ public function store(Request $request)
      */
     public function update(Request $request, Service $service)
     {
-        //
+        // Validate the request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string|max:255',
+            'noise_level' => 'required|in:low,medium,high',
+            'lighting_level' => 'required|in:dim,normal,bright',   
+            'crowd_level' => 'required|in:low,medium,high',  
+            'autism_friendly_hours' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',    
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',      
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($service->image) {
+                Storage::delete('public/images/services/' . $service->image);
+            }
+
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/services'), $imageName);
+            $data['image'] = $imageName;
+        }
+
+        $service->update($data);
+
+        return to_route('services.index')->with('success', 'Service updated successfully.');
     }
 
     /**
@@ -104,6 +144,18 @@ public function store(Request $request)
      */
     public function destroy(Service $service)
     {
-        //
+
+        // Check if the user is an admin
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('services.index')->with('error', 'Unauthorized access.');
+        }
+        // delete image if exists
+        if ($service->image) {
+            Storage::delete('public/images/services/' . $service->image);
+        }
+
+        $service->delete();
+
+        return to_route('services.index')->with('success', 'Service deleted successfully.');
     }
 }
