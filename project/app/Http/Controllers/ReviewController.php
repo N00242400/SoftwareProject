@@ -41,7 +41,7 @@ class ReviewController extends Controller
     
         Review::create([
             'service_id' => $request->service_id,
-            'user_id' => auth()->id(), 
+            'user_id' => auth()->id(), //link to user
             'description' => $request->description,
             'noise_rating' => $request->noise_rating,
             'lighting_rating' => $request->lighting_rating,
@@ -65,41 +65,43 @@ class ReviewController extends Controller
      */
     public function edit(Review $review)
     {
-        
-        if ($review->user_id !== auth()->id()) {
+        // Only the review owner or admin can edit
+        if ($review->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
             return redirect()->back()->with('error', 'Unauthorized.');
         }
     
         return view('reviews.edit', compact('review'));
     }
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Review $review)
-{
-    if ($review->user_id !== auth()->id()) {
-        return redirect()->back()->with('error', 'Unauthorized.');
+    {
+        if ($review->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
+            return redirect()->back()->with('error', 'Unauthorized.');
+        }
+    
+        $request->validate([
+            'description' => 'nullable|string|max:1000',
+            'noise_rating' => 'nullable|in:low,medium,high',
+            'lighting_rating' => 'nullable|in:low,medium,high',
+            'crowd_rating' => 'nullable|in:dim,normal,bright',
+        ]);
+    
+        $review->update($request->only([
+            'description','noise_rating','lighting_rating','crowd_rating'
+        ]));
+    
+        return redirect()->route('services.show', $review->service_id)
+        ->with('success', 'Review updated successfully!');
     }
-
-    $request->validate([
-        'description' => 'nullable|string|max:1000',
-        'noise_rating' => 'nullable|in:low,medium,high',
-        'lighting_rating' => 'nullable|in:low,medium,high',
-        'crowd_rating' => 'nullable|in:dim,normal,bright',
-    ]);
-
-    $review->update($request->only(['description','noise_rating','lighting_rating','crowd_rating']));
-
-    return redirect()->back()->with('success', 'Review updated successfully!');
-}
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Review $review)
 {
-    if ($review->user_id !== auth()->id()) {
+    if ($review->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
         return redirect()->back()->with('error', 'Unauthorized.');
     }
 
