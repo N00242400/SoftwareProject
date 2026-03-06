@@ -12,14 +12,23 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //fetch all services
-        $services = Service::all();
-        //pass services to view
-        return view('services.index', compact('services'));
-    }
+public function index(Request $request)
+{
+    $search = $request->input('search');
+    $category = $request->input('category');
 
+    //  Scout search 
+    $services = $search
+        ? Service::search($search) // Scout handles the search
+                 ->when($category, fn($query) => $query->where('category_id', $category))
+                 ->get()
+        : Service::when($category, fn($query) => $query->where('category_id', $category))
+                 ->get();
+
+    $categories = Category::all();
+
+    return view('services.index', compact('services', 'categories'));
+}
     /**
      * Show the form for creating a new resource.
      */

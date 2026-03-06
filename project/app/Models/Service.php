@@ -1,17 +1,17 @@
 <?php
- 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Category; 
+use Laravel\Scout\Searchable; // ✅ Correct Scout trait
+use App\Models\Category;
 use App\Models\Review;
 
- 
 class Service extends Model
 {
+    use HasFactory, Searchable;
 
-  use HasFactory;
     protected $fillable = [
         'category_id',
         'name',
@@ -25,22 +25,24 @@ class Service extends Model
         'crowd_level',
         'autism_friendly_hours'
     ];
- 
-    // A service belongs to one category
+
+    // Scout will index these fields
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+            'address' => $this->address,
+        ];
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
- 
-    // A service has many reviews
-   public function reviews()
+
+    public function reviews()
     {
-       return $this->hasMany(Review::class);
+        return $this->hasMany(Review::class);
     }
- 
-    // A service can be favourited by many users
-   // public function favourites()
-  //  {
-//        return $this->hasMany(Favourite::class);
-  //  }
 }
