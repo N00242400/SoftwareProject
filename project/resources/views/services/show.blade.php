@@ -155,7 +155,7 @@
                         <div class="flex gap-2">
                             <div>
                                 <label for="noise_rating" class="block font-medium">Noise</label>
-                                <select name="noise_rating" id="noise_rating" class="border rounded p-1 w-full">
+                                <select name="noise_rating" id="noise_rating" class="border rounded p-1 pr-8 w-full">
                                     <option value="">Select</option>
                                     <option value="low">Low</option>
                                     <option value="medium">Medium</option>
@@ -164,7 +164,7 @@
                             </div>
                             <div>
                                 <label for="lighting_rating" class="block font-medium">Lighting</label>
-                                <select name="lighting_rating" id="lighting_rating" class="border rounded p-1 w-full">
+                                <select name="lighting_rating" id="lighting_rating" class="border rounded p-1 pr-8 w-full">
                                     <option value="">Select</option>
                                     <option value="low">Low</option>
                                     <option value="medium">Medium</option>
@@ -173,7 +173,7 @@
                             </div>
                             <div>
                                 <label for="crowd_rating" class="block font-medium">Crowd</label>
-                                <select name="crowd_rating" id="crowd_rating" class="border rounded p-1 w-full">
+                                <select name="crowd_rating" id="crowd_rating" class="border rounded p-1 pr-8 w-full">
                                     <option value="">Select</option>
                                     <option value="dim">Dim</option>
                                     <option value="normal">Normal</option>

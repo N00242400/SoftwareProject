@@ -5,7 +5,7 @@
             <!-- Logo -->
             <div class="flex-shrink-0 flex items-center">
                 <a href="{{ route('dashboard') }}">
-                    <x-application-logo class="h-10 w-auto fill-current text-[#9773B3]" />
+                    <img src="{{ asset('images/services/logo.png') }}" class="h-32 w-auto" alt="Sensory Logo">
                 </a>
             </div>
 
