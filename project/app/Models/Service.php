@@ -4,14 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable; // ✅ Correct Scout trait
+//use scout to search instead of sql code
+use Laravel\Scout\Searchable; 
 use App\Models\Category;
 use App\Models\Review;
 
 class Service extends Model
 {
+    //makes model searchable 
+    // has factory generates fake data for seeding
     use HasFactory, Searchable;
 
+    //mass assignable fields
     protected $fillable = [
         'category_id',
         'name',
@@ -27,6 +31,7 @@ class Service extends Model
     ];
 
     // Scout will index these fields
+    //function returns an array
     public function toSearchableArray(): array
     {
         return [
