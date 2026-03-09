@@ -14,14 +14,19 @@ class ServiceController extends Controller
      */
 public function index(Request $request)
 {
+    //what is typed in search box
     $search = $request->input('search');
+    //which category button is clicked
     $category = $request->input('category');
 
-    //  Scout search 
+    //  Scout full text search 
+    // fn function
     $services = $search
-        ? Service::search($search) // Scout handles the search
+        ? Service::search($search) 
+        //only filter by category if $category exists”
                  ->when($category, fn($query) => $query->where('category_id', $category))
                  ->get()
+        //if none show all 
         : Service::when($category, fn($query) => $query->where('category_id', $category))
                  ->get();
 

@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="bg-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-14 items-center">
 
             <!-- Logo -->
             <div class="flex-shrink-0 flex items-center">
@@ -19,11 +19,13 @@
                 <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
                     {{ __('All Services') }}
                 </x-nav-link>
+                <x-nav-link :href="route('favourites.index')" :active="request()->routeIs('favourites.index')">
+                    {{ __('My Favourites') }}
+                </x-nav-link>
 
                 @auth
                     @if(auth()->user()->role === 'admin')
-                        <x-nav-link :href="route('services.create')" :active="request()->routeIs('services.create')"
-                            class="bg-[#9773B3] text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                        <x-nav-link :href="route('services.create')" :active="request()->routeIs('services.create')">
                             {{ __('Create Service') }}
                         </x-nav-link>
                     @endif

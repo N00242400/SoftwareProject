@@ -8,7 +8,7 @@
             <!-- Left side -->
             <div class="flex-1 text-center lg:text-left">
                 <h1 class="font-nunito text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 text-[#9773B3]">
-                    Find Autism Friendly Services
+                    Find Sensory Friendly Services
                 </h1>
                 <p class="font-nunito text-lg sm:text-xl mb-6 text-[#9773B3]">
                     Search for places with suitable noise, lighting and crowd levels
@@ -28,6 +28,7 @@
                        class="px-5 py-2 rounded {{ request('category') ? 'bg-gray-200' : 'bg-[#9773B3] text-white hover:bg-purple-700 ' }}">
                         All
                     </a>
+                    <!-- loops through all $categories and creates a button for each category -->
                     @foreach($categories as $cat)
                         <a href="{{ route('services.index', ['category' => $cat->id, 'search' => request('search')]) }}"
                            class="px-5 py-2 rounded {{ request('category') == $cat->id ? 'bg-[#9773B3] text-white' : 'bg-gray-200' }}">
@@ -49,17 +50,18 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 -mt-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($services as $service)
-                <x-service-card 
-                    :name="$service->name"
-                    :image="$service->image"
-                    :description="$service->description"
-                    :link="route('services.show', $service)" 
-                    :category="$service->category->name ?? null"
-                    :noise_level="$service->noise_level"
-                    :lighting_level="$service->lighting_level"
-                    :crowd_level="$service->crowd_level"
-                />
-            @endforeach
+            <x-service-card 
+                :service="$service"   
+                :name="$service->name"
+                :image="$service->image"
+                :description="$service->description"
+                :link="route('services.show', $service)" 
+                :category="$service->category->name ?? null"
+                :noise_level="$service->noise_level"
+                :lighting_level="$service->lighting_level"
+                :crowd_level="$service->crowd_level"
+            />
+        @endforeach
         </div>
     </div>
 </x-app-layout>

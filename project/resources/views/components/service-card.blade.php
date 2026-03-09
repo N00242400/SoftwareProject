@@ -1,8 +1,9 @@
 @props([
-    'name',
-    'image',
+    'service',       
+    'name' => null,
+    'image' => null,
     'description' => null,
-    'link',       
+    'link' => '#',       
     'category' => null,
     'noise_level' => null,
     'lighting_level' => null,
@@ -55,14 +56,38 @@
                     </div>
                 </div>
 
+                {{-- Favourite Toggle --}}
+                @auth
+                    @php
+                        $favourite = $service->favouriteForUser();
+                    @endphp
+
+                    <form action="{{ $favourite 
+                        ? route('favourites.destroy', $favourite) 
+                        : route('favourites.store') }}" method="POST" class="mt-4">
+                        @csrf
+                        @if($favourite)
+                            @method('DELETE')
+                        @else
+                            <input type="hidden" name="service_id" value="{{ $service->id }}">
+                        @endif
+
+                        <button type="submit" 
+                            class="bg-{{ $favourite ? 'red' : 'blue' }}-500 text-white px-4 py-2 rounded hover:bg-{{ $favourite ? 'red' : 'blue' }}-700 transition">
+                            {{ $favourite ? 'Remove from Favourites' : 'Add to Favourites' }}
+                        </button>
+                    </form>
+                @endauth
+
+                {{-- Admin Controls --}}
                 @auth
                     @if(auth()->user()->role === 'admin')
                         <div class="flex gap-3 mt-4">
-                            <a href="{{ route('services.edit', $link) }}" 
+                            <a href="{{ route('services.edit', $service) }}" 
                                class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold rounded">
                                Edit
                             </a>
-                            <form action="{{ route('services.destroy', $link) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                            <form action="{{ route('services.destroy', $service) }}" method="POST" onsubmit="return confirm('Are you sure?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 

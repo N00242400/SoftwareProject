@@ -50,4 +50,8 @@ protected $fillable = [
 {
     return $this->hasMany(Review::class);
 }
+
+public function favourites() {
+    return $this->hasMany(Favourite::class);
+}
 }

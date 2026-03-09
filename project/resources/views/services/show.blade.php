@@ -44,13 +44,18 @@
                     {{-- Reviews Section --}}
                     <hr class="my-6">
                     <h3 class="font-semibold text-lg mb-4">Reviews:</h3>
-                     {{-- Alpine component for this review --}}
+
+                    {{-- Reviews Loop --}}
                     @foreach($service->reviews as $review)
-                        <div class="border p-3 mb-3 rounded-md bg-gray-50 review-item" data-review-id="{{ $review->id }}">
+                        <div 
+                            class="border p-3 mb-3 rounded-md bg-gray-50 review-item" 
+                            data-review-id="{{ $review->id }}" 
+                            x-data="{ editing: false }"
+                        >
                             <p class="font-semibold">{{ $review->user?->name ?? 'Guest' }}</p>
 
-                           
-                            <div class="review-display">
+                            <!-- Review display (view mode) -->
+                            <div x-show="!editing" class="review-display">
                                 @if($review->description)
                                     <p class="review-text">{{ $review->description }}</p>
                                 @endif
@@ -65,12 +70,18 @@
                             @auth
                                 @if(auth()->id() === $review->user_id || auth()->user()->role === 'admin')
                                     <div class="mt-2 flex gap-2 review-buttons">
-                                        <!-- edit button to go to edit form -->
-                                        <button type="button" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition edit-review-btn">
+                                        <button 
+                                            type="button" 
+                                            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition" 
+                                            @click="editing = true" 
+                                            x-show="!editing"
+                                        >
                                             Edit
                                         </button>
                                         <form action="{{ route('reviews.destroy', $review) }}" method="POST"
-                                              onsubmit="return confirm('Are you sure you want to delete this review?');">
+                                              onsubmit="return confirm('Are you sure you want to delete this review?');"
+                                              x-show="!editing"
+                                        >
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -82,8 +93,13 @@
                                 @endif
                             @endauth
 
-                            {{-- form drop down--}}
-                            <form action="{{ route('reviews.update', $review) }}" method="POST" class="inline-edit-form mt-3 hidden space-y-2">
+                            <!-- edit mode -->
+                            <form 
+                                action="{{ route('reviews.update', $review) }}" 
+                                method="POST" 
+                                class="inline-edit-form mt-3 space-y-2" 
+                                x-show="editing"
+                            >
                                 @csrf
                                 @method('PUT')
 
@@ -112,10 +128,15 @@
 
                                 <div class="flex gap-2">
                                     <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-700 transition">Update</button>
-                                    <button type="button" class="cancel-edit-btn bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400 transition">Cancel</button>
+                                    <button 
+                                        type="button" 
+                                        class="cancel-edit-btn bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400 transition" 
+                                        @click="editing = false"
+                                    >
+                                        Cancel
+                                    </button>
                                 </div>
                             </form>
-
                         </div>
                     @endforeach
 
@@ -171,27 +192,6 @@
         </div>
     </div>
 
-    {{-- toggles visability--}}
-    <script>
-        //finds all “Cancel” buttons on the page.//
-        //loops through each button to attach a click event listener.//
-        document.querySelectorAll('.edit-review-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                //finds the parent container of the review//
-                const reviewItem = button.closest('.review-item');
-                reviewItem.querySelector('.review-display').classList.add('hidden');
-                reviewItem.querySelector('.inline-edit-form').classList.remove('hidden');
-                reviewItem.querySelector('.review-buttons').classList.add('hidden');
-            });
-        });
-
-        document.querySelectorAll('.cancel-edit-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                const reviewItem = button.closest('.review-item');
-                reviewItem.querySelector('.review-display').classList.remove('hidden');
-                reviewItem.querySelector('.inline-edit-form').classList.add('hidden');
-                reviewItem.querySelector('.review-buttons').classList.remove('hidden');
-            });
-        });
-    </script>
+    {{-- Alpine.js --}}
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </x-app-layout>

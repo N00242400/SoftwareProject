@@ -50,4 +50,14 @@ class Service extends Model
     {
         return $this->hasMany(Review::class);
     }
+// favourite for the logged in user (or null if none)
+    public function favouriteForUser()
+    {
+        return $this->favourites()->where('user_id', auth()->id())->first();
+    }
+    //all favourites for this service
+    public function favourites()
+    {
+        return $this->hasMany(Favourite::class);
+    }
 }
