@@ -14,6 +14,7 @@
                     Search for places with suitable noise, lighting and crowd levels
                 </p>
 
+                <!-- Search Form -->
                 <form action="{{ route('services.index') }}" method="GET" class="flex justify-center lg:justify-start mb-4">
                     <input type="text" name="search" value="{{ request('search') }}"
                         placeholder="Search services..." 
@@ -23,12 +24,12 @@
                     </button>
                 </form>
 
+                <!-- Category Buttons -->
                 <div class="flex flex-wrap justify-center lg:justify-start gap-3">
                     <a href="{{ route('services.index') }}"
                        class="px-5 py-2 rounded {{ request('category') ? 'bg-gray-200' : 'bg-[#9773B3] text-white hover:bg-purple-700 ' }}">
                         All
                     </a>
-                    <!-- loops through all $categories and creates a button for each category -->
                     @foreach($categories as $cat)
                         <a href="{{ route('services.index', ['category' => $cat->id, 'search' => request('search')]) }}"
                            class="px-5 py-2 rounded {{ request('category') == $cat->id ? 'bg-[#9773B3] text-white' : 'bg-gray-200' }}">
@@ -46,22 +47,83 @@
         </div>
     </div>
 
-    <!-- Services Grid Section -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 -mt-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach($services as $service)
-            <x-service-card 
-                :service="$service"   
-                :name="$service->name"
-                :image="$service->image"
-                :description="$service->description"
-                :link="route('services.show', $service)" 
-                :category="$service->category->name ?? null"
-                :noise_level="$service->noise_level"
-                :lighting_level="$service->lighting_level"
-                :crowd_level="$service->crowd_level"
-            />
-        @endforeach
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 flex flex-col lg:flex-row gap-8 mt-8">
+
+        <!-- Filters Section -->
+        <div class="w-full lg:w-1/4 bg-white p-4 rounded shadow space-y-4">
+            <h3 class="font-bold text-lg mb-2">Sensory Filters</h3>
+
+            <form method="GET" action="{{ route('services.index') }}" class="space-y-4">
+              
+                <input type="hidden" name="search" value="{{ request('search') }}">
+                <input type="hidden" name="category" value="{{ request('category') }}">
+
+                {{-- Noise --}}
+                <div>
+                    <label class="font-semibold">Noise Level</label>
+                    <select name="noise_level" class="border rounded w-full p-2">
+                        <option value="">Any</option>
+                        <option value="low" {{ request('noise_level') == 'low' ? 'selected' : '' }}>Low</option>
+                        <option value="medium" {{ request('noise_level') == 'medium' ? 'selected' : '' }}>Medium</option>
+                        <option value="high" {{ request('noise_level') == 'high' ? 'selected' : '' }}>High</option>
+                    </select>
+                </div>
+
+                {{-- Lighting --}}
+                <div>
+                    <label class="font-semibold">Lighting</label>
+                    <select name="lighting_level" class="border rounded w-full p-2">
+                        <option value="">Any</option>
+                        <option value="dim" {{ request('lighting_level') == 'dim' ? 'selected' : '' }}>Dim</option>
+                        <option value="normal" {{ request('lighting_level') == 'normal' ? 'selected' : '' }}>Normal</option>
+                        <option value="bright" {{ request('lighting_level') == 'bright' ? 'selected' : '' }}>Bright</option>
+                    </select>
+                </div>
+
+                {{-- Crowd --}}
+                <div>
+                    <label class="font-semibold">Crowd Level</label>
+                    <select name="crowd_level" class="border rounded w-full p-2">
+                        <option value="">Any</option>
+                        <option value="low" {{ request('crowd_level') == 'low' ? 'selected' : '' }}>Low</option>
+                        <option value="medium" {{ request('crowd_level') == 'medium' ? 'selected' : '' }}>Medium</option>
+                        <option value="high" {{ request('crowd_level') == 'high' ? 'selected' : '' }}>High</option>
+                    </select>
+                </div>
+
+                {{-- Autism Friendly Hours --}}
+                <div>
+                    <label class="font-semibold">Autism Friendly Hours</label>
+                    <select name="autism_hours" class="border rounded w-full p-2">
+                        <option value="">Any</option>
+                        <option value="yes" {{ request('autism_hours') == 'yes' ? 'selected' : '' }}>Available</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="bg-[#9773B3] text-white px-4 py-2 rounded w-full hover:bg-purple-700 transition">
+                    Apply Filters
+                </button>
+            </form>
         </div>
+
+        <!-- Services Grid -->
+        <div class="w-full lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($services as $service)
+                <x-service-card 
+                    :service="$service"   
+                    :name="$service->name"
+                    :image="$service->image"
+                    :description="$service->description"
+                    :link="route('services.show', $service)" 
+                    :category="$service->category->name ?? null"
+                    :noise_level="$service->noise_level"
+                    :lighting_level="$service->lighting_level"
+                    :crowd_level="$service->crowd_level"
+                />
+            @endforeach
+        </div>
+
     </div>
+
 </x-app-layout>

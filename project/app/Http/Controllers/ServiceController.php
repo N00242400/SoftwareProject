@@ -14,25 +14,55 @@ class ServiceController extends Controller
      */
 public function index(Request $request)
 {
-    //what is typed in search box
+    // Get all filter inputs
     $search = $request->input('search');
-    //which category button is clicked
     $category = $request->input('category');
+    $noise = $request->input('noise_level');
+    $lighting = $request->input('lighting_level');
+    $crowd = $request->input('crowd_level');
+    $autismHours = $request->input('autism_hours');
 
-    //  Scout full text search 
-    // fn function
+    // Scout search if there is a search term
     $services = $search
-        ? Service::search($search) 
-        //only filter by category if $category exists”
-                 ->when($category, fn($query) => $query->where('category_id', $category))
-                 ->get()
-        //if none show all 
-        : Service::when($category, fn($query) => $query->where('category_id', $category))
-                 ->get();
+        ? Service::search($search)
+        : Service::query();
 
+    // Apply category filter if selected
+    if ($category) {
+        $services = $services->where('category_id', $category);
+    }
+
+    // Apply sensory filters 
+    if ($noise) {
+        $services = $services->where('noise_level', $noise);
+    }
+
+    if ($lighting) {
+        $services = $services->where('lighting_level', $lighting);
+    }
+
+    if ($crowd) {
+        $services = $services->where('crowd_level', $crowd);
+    }
+
+    // Apply autism friendly hours filter
+    if ($autismHours === 'yes') {
+     
+        $services = $services->whereNotNull('autism_friendly_hours')
+                             ->where('autism_friendly_hours', '!=', '');
+    }
+
+    if ($search) {
+        $services = $services->get();
+    } else {
+        $services = $services->get();
+    }
+
+    // Load categories for buttons
     $categories = Category::all();
 
     return view('services.index', compact('services', 'categories'));
+
 }
     /**
      * Show the form for creating a new resource.
