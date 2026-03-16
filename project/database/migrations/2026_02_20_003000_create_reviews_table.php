@@ -26,9 +26,8 @@ return new class extends Migration
 
             // Ratings
             $table->enum('noise_rating', ['low', 'medium', 'high'])->nullable();
-            $table->enum('lighting_rating', ['low', 'medium', 'high'])->nullable();
-            $table->enum('crowd_rating', ['dim', 'normal', 'bright'])->nullable();
-
+            $table->enum('lighting_rating', ['dim','normal','bright'])->nullable();
+            $table->enum('crowd_rating', ['low','medium','high'])->nullable();
             $table->timestamps();
         });
     }

@@ -22,6 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('reviews', ReviewController::class)
         ->only(['store', 'edit', 'update', 'destroy']);
 
+  Route::resource('categories', CategoryController::class);
+
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

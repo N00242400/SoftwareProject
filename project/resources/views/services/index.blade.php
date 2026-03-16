@@ -48,7 +48,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 flex flex-col lg:flex-row gap-8 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 flex  gap-8 mt-8">
 
         <!-- Filters Section -->
         <div class="w-full lg:w-1/4 bg-white p-4 rounded shadow space-y-4">
@@ -89,15 +89,6 @@
                         <option value="low" {{ request('crowd_level') == 'low' ? 'selected' : '' }}>Low</option>
                         <option value="medium" {{ request('crowd_level') == 'medium' ? 'selected' : '' }}>Medium</option>
                         <option value="high" {{ request('crowd_level') == 'high' ? 'selected' : '' }}>High</option>
-                    </select>
-                </div>
-
-                {{-- Autism Friendly Hours --}}
-                <div>
-                    <label class="font-semibold">Autism Friendly Hours</label>
-                    <select name="autism_hours" class="border rounded w-full p-2">
-                        <option value="">Any</option>
-                        <option value="yes" {{ request('autism_hours') == 'yes' ? 'selected' : '' }}>Available</option>
                     </select>
                 </div>
 
