@@ -17,7 +17,7 @@
                 <!-- Search Form -->
                 <form action="{{ route('services.index') }}" method="GET" class="flex justify-center lg:justify-start mb-4">
                     <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="Search services..." 
+                        placeholder="Search services..."
                         class="w-72 sm:w-80 lg:w-96 px-4 py-3 rounded-l-lg border border-gray-300 focus:outline-none">
                     <button type="submit" class="bg-[#9773B3] hover:bg-purple-700 px-6 py-3 rounded-r-lg text-white text-lg">
                         Search
@@ -27,9 +27,10 @@
                 <!-- Category Buttons -->
                 <div class="flex flex-wrap justify-center lg:justify-start gap-3">
                     <a href="{{ route('services.index') }}"
-                       class="px-5 py-2 rounded {{ request('category') ? 'bg-gray-200' : 'bg-[#9773B3] text-white hover:bg-purple-700 ' }}">
+                       class="px-5 py-2 rounded {{ request('category') ? 'bg-gray-200' : 'bg-[#9773B3] text-white hover:bg-purple-700' }}">
                         All
                     </a>
+
                     @foreach($categories as $cat)
                         <a href="{{ route('services.index', ['category' => $cat->id, 'search' => request('search')]) }}"
                            class="px-5 py-2 rounded {{ request('category') == $cat->id ? 'bg-[#9773B3] text-white' : 'bg-gray-200' }}">
@@ -48,14 +49,14 @@
     </div>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 flex  gap-8 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 flex gap-8 mt-8">
 
         <!-- Filters Section -->
         <div class="w-full lg:w-1/4 bg-white p-4 rounded shadow space-y-4">
             <h3 class="font-bold text-lg mb-2">Sensory Filters</h3>
 
             <form method="GET" action="{{ route('services.index') }}" class="space-y-4">
-              
+
                 <input type="hidden" name="search" value="{{ request('search') }}">
                 <input type="hidden" name="category" value="{{ request('category') }}">
 
@@ -98,21 +99,31 @@
             </form>
         </div>
 
-        <!-- Services Grid -->
-        <div class="w-full lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach($services as $service)
-                <x-service-card 
-                    :service="$service"   
-                    :name="$service->name"
-                    :image="$service->image"
-                    :description="$service->description"
-                    :link="route('services.show', $service)" 
-                    :category="$service->category->name ?? null"
-                    :noise_level="$service->noise_level"
-                    :lighting_level="$service->lighting_level"
-                    :crowd_level="$service->crowd_level"
-                />
-            @endforeach
+        <!-- Services Grid + Pagination -->
+        <div class="w-full lg:w-3/4">
+
+            <!-- Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($services as $service)
+                    <x-service-card 
+                        :service="$service"
+                        :name="$service->name"
+                        :image="$service->image"
+                        :description="$service->description"
+                        :link="route('services.show', $service)"
+                        :category="$service->category->name ?? null"
+                        :noise_level="$service->noise_level"
+                        :lighting_level="$service->lighting_level"
+                        :crowd_level="$service->crowd_level"
+                    />
+                @endforeach
+            </div>
+
+            <!-- Pagination  -->
+            <div class="flex justify-center mt-6 mb-6">
+                {{ $services->links() }}
+            </div>
+
         </div>
 
     </div>
