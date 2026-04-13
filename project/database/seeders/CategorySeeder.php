@@ -9,11 +9,14 @@ class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-       
         DB::table('categories')->insert([
-            ['id' => 1, 'name' => 'Cafe', 'description' => 'Coffee shops and cafes'],
-            ['id' => 2, 'name' => 'Library', 'description' => 'Libraries and reading spaces'],
-            ['id' => 3, 'name' => 'Restaurant', 'description' => 'Restaurants and eateries'],
+            ['name' => 'Cafés & Coffee Shops', 'description' => 'Coffee shops, brunch spots, and cafés'],
+            ['name' => 'Libraries & Study Spaces', 'description' => 'Quiet places to study or read'],
+            ['name' => 'Restaurants', 'description' => 'Dining restaurants and eateries'],
+            ['name' => 'Coworking Spaces', 'description' => 'Work-friendly shared offices'],
+            ['name' => 'Pubs & Social Spots', 'description' => 'Casual meeting and social venues'],
+            ['name' => 'Parks & Outdoor Spaces', 'description' => 'Outdoor relaxation and green spaces'],
+            ['name' => 'Museums & Culture', 'description' => 'Cultural and educational locations'],
         ]);
     }
 }

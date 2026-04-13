@@ -1,6 +1,7 @@
 <x-app-layout>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
+
     <div class="min-h-screen bg-gradient-to-b from-purple-100 to-purple-150">
 
         <!-- Hero Section -->
