@@ -30,8 +30,10 @@
                         </x-nav-link>
 
                         <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.create')">
-                            {{ __('Categories') }}
+                            {{ __('Create Categories') }}
                         </x-nav-link>
+
+                     
                     @endif
                 @endauth
             </div>
