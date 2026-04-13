@@ -28,6 +28,10 @@
                         <x-nav-link :href="route('services.create')" :active="request()->routeIs('services.create')">
                             {{ __('Create Service') }}
                         </x-nav-link>
+
+                        <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.create')">
+                            {{ __('Categories') }}
+                        </x-nav-link>
                     @endif
                 @endauth
             </div>

@@ -1,9 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">My Favourites</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            My Favourites
+        </h2>
     </x-slot>
 
-    <div class="py-12">
+    <!-- FULL PAGE BACKGROUND -->
+    <div class="min-h-screen bg-gradient-to-b from-purple-100 to-purple-150 py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             {{-- Success Message --}}
@@ -25,30 +28,33 @@
                     You have no favourites yet.
                 </div>
             @else
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- GRID -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
                     @foreach($favourites as $favourite)
-                        <div class="bg-white shadow-sm rounded-lg p-6 border border-gray-200">
-                            <h3 class="text-lg font-semibold mb-2">{{ $favourite->service->name }}</h3>
-                            <p class="text-gray-600 mb-3">{{ $favourite->service->description }}</p>
+                        <div class="relative group">
 
-                            <p class="text-sm text-gray-500 mb-2">
-                                Email: {{ $favourite->service->email }}<br>
-                                Phone: {{ $favourite->service->phone }}<br>
-                                Address: {{ $favourite->service->address }}
-                            </p>
+                            <!-- SERVICE CARD -->
+                            <x-service-card 
+                                :service="$favourite->service"
+                                :name="$favourite->service->name"
+                                :image="$favourite->service->image"
+                                :description="$favourite->service->description"
+                                :link="route('services.show', $favourite->service)"
+                                :category="$favourite->service->category->name ?? null"
+                                :noise_level="$favourite->service->noise_level"
+                                :lighting_level="$favourite->service->lighting_level"
+                                :crowd_level="$favourite->service->crowd_level"
+                            />
 
-                            {{-- Remove Favourite Button --}}
-                            <form action="{{ route('favourites.destroy', $favourite) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" 
-                                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 transition">
-                                    Remove from Favourites
-                                </button>
-                            </form>
+                           
+
                         </div>
                     @endforeach
+
                 </div>
+
             @endif
 
         </div>
