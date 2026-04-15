@@ -28,30 +28,26 @@ class ReviewController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-      
-        $request->validate([
-            'service_id' => 'required|exists:services,id',
-            'description' => 'nullable|string|max:1000',
-            'noise_rating' => 'nullable|in:low,medium,high',
-            'lighting_rating' => 'nullable|in:low,medium,high',
-            'crowd_rating' => 'nullable|in:dim,normal,bright',
-        ]);
-    
-    
-        Review::create([
-            'service_id' => $request->service_id,
-            'user_id' => auth()->id(), //link to user
-            'description' => $request->description,
-            'noise_rating' => $request->noise_rating,
-            'lighting_rating' => $request->lighting_rating,
-            'crowd_rating' => $request->crowd_rating,
-        ]);
-    
-     
-        return redirect()->back()->with('success', 'Review added successfully!');
-    }
+{
+    $request->validate([
+        'service_id' => 'required|exists:services,id',
+        'description' => 'nullable|string|max:1000',
+        'noise_rating' => 'nullable|in:low,medium,high',
+        'lighting_rating' => 'nullable|in:dim,normal,bright',
+        'crowd_rating' => 'nullable|in:low,medium,high',
+    ]);
 
+    Review::create([
+        'service_id' => $request->service_id,
+        'user_id' => auth()->id(),
+        'description' => $request->description,
+        'noise_rating' => $request->noise_rating,
+        'lighting_rating' => $request->lighting_rating,
+        'crowd_rating' => $request->crowd_rating,
+    ]);
+
+    return redirect()->back()->with('success', 'Review added successfully!');
+}
     /**
      * Display the specified resource.
      */
@@ -84,8 +80,8 @@ class ReviewController extends Controller
         $request->validate([
             'description' => 'nullable|string|max:1000',
             'noise_rating' => 'nullable|in:low,medium,high',
-            'lighting_rating' => 'nullable|in:low,medium,high',
-            'crowd_rating' => 'nullable|in:dim,normal,bright',
+            'lighting_rating' => 'nullable|in:dim,normal,bright',
+            'crowd_rating' => 'nullable|in:low,medium,high',
         ]);
     
         $review->update($request->only([
@@ -93,7 +89,7 @@ class ReviewController extends Controller
         ]));
     
         return redirect()->route('services.show', $review->service_id)
-        ->with('success', 'Review updated successfully!');
+            ->with('success', 'Review updated successfully!');
     }
 
     /**

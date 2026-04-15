@@ -9,7 +9,6 @@
     'lighting_level' => null,
     'crowd_level' => null,
     'autism_friendly_hours' => null,
-    'category_id' => null
 ])
 
 <div class="max-w-xl mx-auto border rounded-xl shadow-lg bg-white overflow-hidden hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
@@ -18,23 +17,15 @@
     <div class="h-1 bg-gradient-to-r from-purple-500 to-purple-700"></div>
 
     <!-- Image -->
-
-        <img
-            src="{{ asset('images/services/' . $image) }}"
-            alt="{{ $name }}"
-         class="w-full h-64 md:h-72 object-cover">
+    <img src="{{ Str::startsWith($image, 'http') ? $image : asset('images/services/' . $image) }}"
+    alt="{{ $name }}"
+    class="w-full h-64 md:h-72 object-cover">
 
     <div class="p-6 space-y-4">
 
         <!-- Name -->
         <h2 class="text-2xl font-bold text-gray-800">{{ $name }}</h2>
 
-        <!-- Category -->
-        @if($category_id)
-            <span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full">
-                Category: {{ $category_id }}
-            </span>
-        @endif
 
         <!-- Description -->
         @if($description)
@@ -44,7 +35,7 @@
         @endif
 
         <!-- Contact Info -->
-        <div class="space-y-1 text-gray-600 text-sm mt-3">
+        <div class="space-y-1 text-gray-600 text-sm mt-3 mb-3">
             @if($email)
                 <p class="flex items-center gap-1"><svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 4a2 2 0 012-2h12a2 2 0 012 2v1l-8 5-8-5V4z" /></svg> <a href="mailto:{{ $email }}" class="text-purple-600 hover:underline">{{ $email }}</a></p>
             @endif

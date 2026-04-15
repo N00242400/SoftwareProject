@@ -71,35 +71,70 @@
             {{-- Bottom section --}}
             <div class="mt-auto">
 
-                {{-- Favourite Button --}}
-                @auth
-                    @php
-                        $favourite = $service->favouriteForUser();
-                    @endphp
+{{-- Favourite Button (AJAX - no page refresh) --}}
+{{-- 
+AJAX = sending data to the server without refreshing the page.
+Here we use fetch() to save/remove favourites in the background,
+so the UI updates instantly instead of reloading.
+--}}
+@auth
+<div 
+    x-data="{ 
+        favourited: {{ $service->favouriteForUser() ? 'true' : 'false' }},
+        showMessage: false,
+        message: ''
+    }"
+>
 
-                    <form
-                        action="{{ $favourite ? route('favourites.destroy', $favourite) : route('favourites.store') }}"
-                        method="POST"
-                    >
-                        @csrf
+    <button
+        @click.prevent="
+            fetch(favourited 
+                ? '{{ route('favourites.destroy', $service->id) }}'
+                : '{{ route('favourites.store') }}',
+            {
+                method: favourited ? 'DELETE' : 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ service_id: {{ $service->id }} })
+            })
+            .then(() => {
 
-                        @if($favourite)
-                            @method('DELETE')
-                        @else
-                            <input type="hidden" name="service_id" value="{{ $service->id }}">
-                        @endif
+                // decide message BEFORE flipping state
+                message = favourited 
+                    ? 'Removed from favourites' 
+                    : 'Saved to favourites'
 
-                        <button
-                        type="submit"
-                        class="w-full py-2 rounded-full text-sm font-semibold transition
-                        {{ $favourite
-                            ? 'bg-[#9773B3]/20 text-[#9773B3] hover:bg-[#9773B3]/30'
-                            : 'bg-[#9773B3] text-white hover:bg-purple-700' }}"
-                    >
-                        {{ $favourite ? 'Saved' : 'Add to favourites' }}
-                    </button>
-                    </form>
-                @endauth
+                // toggle state
+                favourited = !favourited
+
+                // show message
+                showMessage = true
+
+                // hide after 2 seconds
+                setTimeout(() => showMessage = false, 2000)
+            })
+        "
+
+        class="w-full py-2 mt-2 rounded-full text-sm font-semibold transition duration-200"
+        :class="favourited 
+            ? 'bg-[#9773B3]/20 text-[#9773B3]' 
+            : 'bg-[#9773B3] text-white hover:bg-purple-700'"
+    >
+        <span x-text="favourited ? 'Saved' : 'Save'"></span>
+    </button>
+
+    {{-- Success Message --}}
+    <p 
+        x-show="showMessage"
+        x-transition
+        x-text="message"
+        class="text-xs mt-2 text-center text-green-600"
+    ></p>
+
+</div>
+@endauth
 
                 {{-- Admin Controls --}}
                 @auth
