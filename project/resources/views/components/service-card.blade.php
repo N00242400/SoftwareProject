@@ -10,119 +10,120 @@
     'crowd_level' => null
 ])
 
-<div class="w-full h-full" x-data="{ showToast: false }">
+<div class="w-full">
 
-    <div class="block w-full h-full">
-        <div class="h-full border rounded-xl shadow-md bg-white overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition duration-300 flex flex-col">
+    <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col h-full">
 
-            {{-- Image --}}
-            <a href="{{ $link }}">
-                <img
-                    src="{{ Str::startsWith($image, 'http') ? $image : asset('images/services/' . $image) }}"
-                    alt="{{ $name }}"
-                    class="w-full h-64 md:h-72 object-cover"
-                >
-            </a>
+        {{-- Image --}}
+        <a href="{{ $link }}" class="relative">
+            <img
+                src="{{ asset('images/services/' . $image) }}"
+                alt="{{ $name }}"
+                class="w-full h-56 object-cover"
+            >
 
-            {{-- Content --}}
-            <div class="p-6 space-y-3 flex flex-col flex-1">
+            {{-- Category badge --}}
+            @if($category)
+            <span class="absolute top-3 left-3 bg-white px-3 py-1 rounded-full text-xs font-semibold text-purple-700 shadow-sm border">
+                {{ $category }}
+            </span>
+            @endif
+        </a>
 
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-800">{{ $name }}</h3>
+        {{-- Content --}}
+        <div class="p-5 flex flex-col flex-1">
 
-                    @if($category)
-                        <span class="inline-block bg-purple-100 text-purple-700 text-sm font-semibold px-3 py-1 rounded-full mt-1">
-                            {{ $category }}
-                        </span>
-                    @endif
+            {{-- Title --}}
+            <h3 class="text-lg font-bold text-gray-900 mb-1">
+                {{ $name }}
+            </h3>
 
-                    @if($description)
-                        <p class="text-gray-600 text-sm md:text-base leading-relaxed mt-2">
-                            {{ Str::limit($description, 180) }}
-                        </p>
-                    @endif
+            {{-- Description --}}
+            @if($description)
+                <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                    {{ Str::limit($description, 100) }}
+                </p>
+            @endif
 
-                    <div class="flex gap-3 mt-3 flex-wrap">
-                        @if($noise_level)
-                            <span class="bg-purple-50 text-purple-700 text-sm font-semibold px-3 py-1 rounded-full">
-                                Noise: {{ $noise_level }}
-                            </span>
-                        @endif
+            {{-- Sensory badges --}}
+            <div class="flex flex-wrap gap-2 mb-4">
 
-                        @if($lighting_level)
-                            <span class="bg-yellow-50 text-yellow-700 text-sm font-semibold px-3 py-1 rounded-full">
-                                Lighting: {{ $lighting_level }}
-                            </span>
-                        @endif
+                @if($noise_level)
+                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
+                        Noise: {{ ucfirst($noise_level) }}
+                    </span>
+                @endif
 
-                        @if($crowd_level)
-                            <span class="bg-green-50 text-green-700 text-sm font-semibold px-3 py-1 rounded-full">
-                                Crowd: {{ $crowd_level }}
-                            </span>
-                        @endif
-                    </div>
-                </div>
+                @if($lighting_level)
+                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                        Lighting: {{ ucfirst($lighting_level) }}
+                    </span>
+                @endif
 
-                {{-- Push bottom content down --}}
-                <div class="mt-auto">
+                @if($crowd_level)
+                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                        Crowd: {{ ucfirst($crowd_level) }}
+                    </span>
+                @endif
 
-                    {{-- Favourite Button --}}
-                    @auth
-                        @php
-                            $favourite = $service->favouriteForUser();
-                        @endphp
-
-                        <form
-                            action="{{ $favourite ? route('favourites.destroy', $favourite) : route('favourites.store') }}"
-                            method="POST"
-                            onsubmit="showToast = true"
-                            class="mt-2"
-                        >
-                            @csrf
-
-                            @if($favourite)
-                                @method('DELETE')
-                            @else
-                                <input type="hidden" name="service_id" value="{{ $service->id }}">
-                            @endif
-
-                            <button
-                                type="submit"
-                                class="w-full px-4 py-2 rounded-lg font-semibold text-sm transition
-                                {{ $favourite
-                                    ? 'bg-red-50 text-red-600 hover:bg-red-100'
-                                    : 'bg-purple-600 text-white hover:bg-purple-700' }}"
-                            >
-                                {{ $favourite ? 'Remove from favourites' : 'Add to favourites' }}
-                            </button>
-                        </form>
-                    @endauth
-
-                    {{-- Admin Controls --}}
-                    @auth
-                        @if(auth()->user()->role === 'admin')
-                            <div class="flex gap-3 mt-4">
-                                <a href="{{ route('services.edit', $service) }}"
-                                   class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold rounded">
-                                    Edit
-                                </a>
-
-                                <form action="{{ route('services.destroy', $service) }}" method="POST" onsubmit="return confirm('Are you sure?');">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit"
-                                        class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded">
-                                        Delete
-                                    </button>
-                                </form>
-                            </div>
-                        @endif
-                    @endauth
-
-                </div>
             </div>
 
+            {{-- Bottom section --}}
+            <div class="mt-auto">
+
+                {{-- Favourite Button --}}
+                @auth
+                    @php
+                        $favourite = $service->favouriteForUser();
+                    @endphp
+
+                    <form
+                        action="{{ $favourite ? route('favourites.destroy', $favourite) : route('favourites.store') }}"
+                        method="POST"
+                    >
+                        @csrf
+
+                        @if($favourite)
+                            @method('DELETE')
+                        @else
+                            <input type="hidden" name="service_id" value="{{ $service->id }}">
+                        @endif
+
+                        <button
+                        type="submit"
+                        class="w-full py-2 rounded-full text-sm font-semibold transition
+                        {{ $favourite
+                            ? 'bg-[#9773B3]/20 text-[#9773B3] hover:bg-[#9773B3]/30'
+                            : 'bg-[#9773B3] text-white hover:bg-purple-700' }}"
+                    >
+                        {{ $favourite ? 'Saved' : 'Add to favourites' }}
+                    </button>
+                    </form>
+                @endauth
+
+                {{-- Admin Controls --}}
+                @auth
+                    @if(auth()->user()->role === 'admin')
+                        <div class="flex gap-2 mt-3">
+                            <a href="{{ route('services.edit', $service) }}"
+                               class="flex-1 text-center py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm rounded">
+                                Edit
+                            </a>
+
+                            <form action="{{ route('services.destroy', $service) }}" method="POST" class="flex-1">
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit"
+                                    class="w-full py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                @endauth
+
+            </div>
         </div>
     </div>
 </div>

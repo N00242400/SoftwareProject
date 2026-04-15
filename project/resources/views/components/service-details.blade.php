@@ -18,9 +18,11 @@
     <div class="h-1 bg-gradient-to-r from-purple-500 to-purple-700"></div>
 
     <!-- Image -->
-    <img src="{{ Str::startsWith($image, 'http') ? $image : asset('images/services/' . $image) }}"
-    alt="{{ $name }}"
-    class="w-full h-64 md:h-72 object-cover">
+
+        <img
+            src="{{ asset('images/services/' . $image) }}"
+            alt="{{ $name }}"
+         class="w-full h-64 md:h-72 object-cover">
 
     <div class="p-6 space-y-4">
 

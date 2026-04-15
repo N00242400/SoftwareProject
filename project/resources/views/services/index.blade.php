@@ -18,27 +18,50 @@
 
                 <!-- Search Form -->
                 <form action="{{ route('services.index') }}" method="GET" class="flex justify-center lg:justify-start mb-4">
-                    <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="Search services..."
-                        class="w-72 sm:w-80 lg:w-96 px-4 py-3 rounded-l-lg border border-gray-300 focus:outline-none">
-                    <button type="submit" class="bg-[#9773B3] hover:bg-purple-700 px-6 py-3 rounded-r-lg text-white text-lg">
-                        Search
-                    </button>
-                </form>
 
+                    <div class="flex w-72 sm:w-80 lg:w-96 bg-white rounded-full overflow-hidden shadow-md">
+                
+                        <input 
+                        type="text" 
+                        name="search" 
+                        value="{{ request('search') }}"
+                        placeholder="Search services..."
+                        class="flex-1 px-4 py-3 bg-transparent border-none focus:outline-none focus:ring-0 appearance-none"
+                    >
+                
+                        <button 
+                            type="submit" 
+                            class="bg-[#9773B3] hover:bg-purple-700 px-6 py-3 text-white text-sm font-semibold rounded-full m-1"
+                        >
+                            Search
+                        </button>
+                
+                    </div>
+                
+                </form>
                 <!-- Category Buttons -->
                 <div class="flex flex-wrap justify-center lg:justify-start gap-3">
+
+                    {{-- All button --}}
                     <a href="{{ route('services.index') }}"
-                       class="px-5 py-2 rounded {{ request('category') ? 'bg-gray-200' : 'bg-[#9773B3] text-white hover:bg-purple-700' }}">
+                       class="px-5 py-2 rounded-full text-sm font-semibold transition shadow-sm
+                       {{ request('category')
+                            ? 'bg-white text-gray-700 hover:bg-purple-700 hover:text-white'
+                            : 'bg-[#9773B3] text-white hover:bg-purple-700' }}">
                         All
                     </a>
-
+                
+                    {{-- Category buttons --}}
                     @foreach($categories as $cat)
                         <a href="{{ route('services.index', ['category' => $cat->id, 'search' => request('search')]) }}"
-                           class="px-5 py-2 rounded {{ request('category') == $cat->id ? 'bg-[#9773B3] text-white' : 'bg-gray-200' }}">
+                           class="px-5 py-2 rounded-full text-sm font-semibold transition shadow-sm
+                           {{ request('category') == $cat->id
+                                ? 'bg-[#9773B3] text-white'
+                                : 'bg-white text-gray-700 hover:bg-purple-700 hover:text-white' }}">
                             {{ $cat->name }}
                         </a>
                     @endforeach
+                
                 </div>
             </div>
 
@@ -95,7 +118,7 @@
                             </select>
                         </div>
 
-                        <button type="submit" class="bg-[#9773B3] text-white px-4 py-2 rounded w-full hover:bg-purple-700 transition">
+                        <button type="submit" class="bg-[#9773B3] text-white px-4 py-2 rounded-full w-full hover:bg-purple-700 transition duration-200 font-semibold">
                             Apply Filters
                         </button>
                     </form>

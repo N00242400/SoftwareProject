@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white shadow-md">
+<nav x-data="{ open: false }" class="bg-[#f3e8ff] shadow-md">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div class="flex justify-between h-14 items-center">
 
