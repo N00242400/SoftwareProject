@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-[#f3e8ff] shadow-md">
+<nav x-data="{ open: false }" class="bg-[#e4c0f6] shadow-md">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div class="flex justify-between h-14 items-center">
 
@@ -22,6 +22,9 @@
                 <x-nav-link :href="route('favourites.index')" :active="request()->routeIs('favourites.index')">
                     {{ __('My Favourites') }}
                 </x-nav-link>
+                <x-nav-link :href="route('sensory.info')" :active="request()->routeIs('sensory.info')">
+                    {{ __('Sensory Info') }}
+                </x-nav-link>
 
                 @auth
                     @if(auth()->user()->role === 'admin')
@@ -29,10 +32,15 @@
                             {{ __('Create Service') }}
                         </x-nav-link>
 
-                        <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.create')">
-                            {{ __('Create Categories') }}
-                        </x-nav-link>
+                        {{-- View Categories --}}
+                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
+                        {{ __('Manage Categories') }}
+                    </x-nav-link>
 
+                    {{-- Create Category --}}
+                    <x-nav-link :href="route('categories.create')" :active="request()->routeIs('categories.create')">
+                        {{ __('Add Category') }}
+                    </x-nav-link>
                      
                     @endif
                 @endauth

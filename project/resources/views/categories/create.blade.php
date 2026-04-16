@@ -1,35 +1,53 @@
-@extends('layouts.app')
+<x-app-layout>
 
-@section('content')
-<h1>Create New Category</h1>
+    <div class="max-w-xl mx-auto py-10 px-4">
 
-@if(session('success'))
-    <p style="color: green;">{{ session('success') }}</p>
-@endif
+        <h1 class="text-2xl font-bold mb-4">Create New Category</h1>
 
-@if($errors->any())
-    <div style="color: red;">
-        <ul>
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+        @if(session('success'))
+            <p class="text-green-600 mb-3">{{ session('success') }}</p>
+        @endif
+
+        @if($errors->any())
+            <div class="text-red-600 mb-3">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>- {{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('categories.store') }}" method="POST" class="space-y-4">
+            @csrf
+
+            <div>
+                <label class="block font-semibold mb-1">Category Name:</label>
+                <input 
+                    type="text" 
+                    name="name" 
+                    required 
+                    value="{{ old('name') }}"
+                    class="w-full border rounded px-3 py-2"
+                >
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Description:</label>
+                <textarea 
+                    name="description"
+                    class="w-full border rounded px-3 py-2"
+                >{{ old('description') }}</textarea>
+            </div>
+
+            <button 
+                type="submit"
+                class="bg-[#9773B3] text-white px-4 py-2 rounded hover:bg-purple-700 transition"
+            >
+                Create Category
+            </button>
+        </form>
+
     </div>
-@endif
 
-<form action="{{ route('categories.store') }}" method="POST">
-    @csrf
-    <div>
-        <label for="name">Category Name:</label>
-        <input type="text" name="name" id="name" required value="{{ old('name') }}">
-    </div>
-    <div>
-        <label for="description">Description (optional):</label>
-        <textarea name="description" id="description">{{ old('description') }}</textarea>
-    </div>
-    <button type="submit">Create Category</button>
-</form>
-
-<br>
-<a href="{{ route('categories.index') }}">Back to Categories</a>
-@endsection
+</x-app-layout>

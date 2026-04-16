@@ -1,57 +1,70 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create New Category') }}
-        </h2>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-gradient-to-b from-purple-100 to-purple-150 py-10">
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="max-w-5xl mx-auto px-4">
 
-                <div class="p-6 text-gray-900">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold text-[#9773B3]">Categories</h1>
 
-                    <h3 class="font-semibold text-lg mb-4">
-                        Add a New Category:
-                    </h3>
+                <a href="{{ route('categories.create') }}"
+                   class="bg-[#9773B3] text-white px-4 py-2 rounded-full hover:bg-purple-700">
+                    + Add Category
+                </a>
+            </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Success Message -->
+            @if(session('success'))
+                <p class="text-green-600 mb-4">{{ session('success') }}</p>
+            @endif
 
-                        <form action="{{ route('categories.store') }}" method="POST" class="space-y-4 col-span-1 sm:col-span-2 lg:col-span-1">
-                            @csrf
+            <!-- Category List -->
+            <div class="bg-white rounded-2xl shadow-md divide-y">
 
-                            <!-- Name -->
-                            <div>
-                                <label class="block font-semibold mb-1">Category Name</label>
-                                <input type="text" name="name"
-                                       class="w-full border rounded p-2"
-                                       placeholder="e.g. Restaurants, Shops"
-                                       required>
-                            </div>
+                @forelse($categories as $category)
+                    <div class="flex justify-between items-center p-4">
 
-                            <!-- Description -->
-                            <div>
-                                <label class="block font-semibold mb-1">Description (optional)</label>
-                                <textarea name="description" rows="4"
-                                          class="w-full border rounded p-2"
-                                          placeholder="Short description of the category"></textarea>
-                            </div>
+                        <!-- Category Info -->
+                        <div>
+                            <h2 class="font-semibold text-lg">{{ $category->name }}</h2>
+                            <p class="text-sm text-gray-500">
+                                {{ $category->description ?? 'No description' }}
+                            </p>
+                        </div>
 
-                            <!-- Button -->
-                            <button type="submit"
-                                    class="bg-[#9773B3] text-white px-4 py-2 rounded hover:bg-purple-700 transition">
-                                Create Category
-                            </button>
+                        <!-- Actions -->
+                        <div class="flex gap-2">
 
-                        </form>
+                            <!-- Edit -->
+                            <a href="{{ route('categories.edit', $category) }}"
+                               class="px-4 py-2 bg-blue-500 text-white rounded-full text-sm hover:bg-blue-600">
+                                Edit
+                            </a>
+
+                            <!-- Delete -->
+                            <form action="{{ route('categories.destroy', $category) }}" method="POST"
+                                  onsubmit="return confirm('Are you sure?');">
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit"
+                                        class="px-4 py-2 bg-red-500 text-white rounded-full text-sm hover:bg-red-600">
+                                    Delete
+                                </button>
+                            </form>
+
+                        </div>
 
                     </div>
-
-                </div>
+                @empty
+                    <p class="p-4 text-gray-500">No categories found.</p>
+                @endforelse
 
             </div>
 
         </div>
+
     </div>
+
 </x-app-layout>

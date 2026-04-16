@@ -63,9 +63,13 @@ class CategoryController extends Controller
     // Delete category
     public function destroy(Category $category)
     {
+        if ($category->services()->count() > 0) {
+            return back()->with('error', 'Cannot delete category with services assigned');
+        }
+    
         $category->delete();
-
+    
         return redirect()->route('categories.index')
-            ->with('success', 'Category deleted successfully!');
+            ->with('success', 'Category deleted');
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::view('/sensory-info', 'sensory-info')->name('sensory.info');
 Route::resource('services', ServiceController::class);
 
 Route::middleware('auth')->group(function () {

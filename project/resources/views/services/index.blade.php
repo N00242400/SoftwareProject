@@ -1,77 +1,74 @@
 <x-app-layout>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
-
+    
     <div class="min-h-screen bg-gradient-to-b from-purple-100 to-purple-150">
-
-        <!-- Hero Section -->
-        <div class="relative flex flex-col lg:flex-row items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-12 lg:py-16 gap-8">
-
-            <!-- Left side -->
-            <div class="flex-1 text-center lg:text-left">
-                <h1 class="font-nunito text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 text-[#9773B3]">
+    
+        <!-- image-->
+        <div class="w-full bg-cover bg-center bg-no-repeat py-28 lg:py-36 relative"
+        style="background-image: url('/images/services/bg.jpg');">
+          
+    
+            <!-- Content -->
+            <div class="relative flex flex-col items-center text-center max-w-4xl mx-auto px-4 gap-8">
+    
+                <h1 class="font-nunito text-4xl sm:text-5xl lg:text-6xl font-bold text-[#9773B3]">
                     Find Sensory Friendly Services
                 </h1>
-                <p class="font-nunito text-lg sm:text-xl mb-6 text-[#9773B3]">
+    
+                <p class="font-nunito text-lg sm:text-xl text-[#9773B3] max-w-xl mx-auto">
                     Search for places with suitable noise, lighting and crowd levels
                 </p>
-
-                <!-- Search Form -->
-                <form action="{{ route('services.index') }}" method="GET" class="flex justify-center lg:justify-start mb-4">
-
+    
+                <!-- Search -->
+                <form action="{{ route('services.index') }}" method="GET" class="flex justify-center">
                     <div class="flex w-72 sm:w-80 lg:w-96 bg-white rounded-full overflow-hidden shadow-md">
-                
+    
                         <input 
-                        type="text" 
-                        name="search" 
-                        value="{{ request('search') }}"
-                        placeholder="Search services..."
-                        class="flex-1 px-4 py-3 bg-transparent border-none focus:outline-none focus:ring-0 appearance-none"
-                    >
-                
+                            type="text" 
+                            name="search" 
+                            value="{{ request('search') }}"
+                            placeholder="Search services..."
+                            class="flex-1 px-4 py-3 bg-transparent border-none focus:outline-none"
+                        >
+    
                         <button 
                             type="submit" 
                             class="bg-[#9773B3] hover:bg-purple-700 px-6 py-3 text-white text-sm font-semibold rounded-full m-1"
                         >
                             Search
                         </button>
-                
+    
                     </div>
-                
                 </form>
-                <!-- Category Buttons -->
-                <div class="flex flex-wrap justify-center lg:justify-start gap-3">
-
-                    {{-- All button --}}
+    
+                <!-- Categories -->
+                <div class="flex flex-wrap justify-center gap-3">
+    
                     <a href="{{ route('services.index') }}"
-                       class="px-5 py-2 rounded-full text-sm font-semibold transition shadow-sm
+                       class="px-5 py-2 rounded-full text-sm font-semibold shadow-sm
                        {{ request('category')
                             ? 'bg-white text-gray-700 hover:bg-purple-700 hover:text-white'
                             : 'bg-[#9773B3] text-white hover:bg-purple-700' }}">
                         All
                     </a>
-                
-                    {{-- Category buttons --}}
+    
                     @foreach($categories as $cat)
                         <a href="{{ route('services.index', ['category' => $cat->id, 'search' => request('search')]) }}"
-                           class="px-5 py-2 rounded-full text-sm font-semibold transition shadow-sm
+                           class="px-5 py-2 rounded-full text-sm font-semibold shadow-sm
                            {{ request('category') == $cat->id
                                 ? 'bg-[#9773B3] text-white'
                                 : 'bg-white text-gray-700 hover:bg-purple-700 hover:text-white' }}">
                             {{ $cat->name }}
                         </a>
                     @endforeach
-                
+    
                 </div>
+    
+            
+    
             </div>
-
-            <!-- Hero Image -->
-            <div class="flex-1 flex justify-center lg:justify-end">
-                <img src="/images/services/hero.png" alt="Autism friendly illustration" class="w-80 sm:w-96 lg:w-[28rem]">
-            </div>
-
         </div>
-
+    
         <!-- Main Content -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 flex items-start gap-8 mt-8">
 
